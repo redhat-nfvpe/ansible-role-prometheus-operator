@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kube-scheduler
+  labels:
+    {{ promops_deploy.name }}-app: kube-scheduler
+spec:
+  jobLabel: {{ promops_deploy.name }}-app
+  endpoints:
+  - port: http-metrics
+    interval: 30s
+  selector:
+    matchLabels:
+      {{ promops_deploy.name }}-app: kube-scheduler
+  namespaceSelector:
+    matchNames:
+    - kube-system

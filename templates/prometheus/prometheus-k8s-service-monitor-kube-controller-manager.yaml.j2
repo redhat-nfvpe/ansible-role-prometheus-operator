@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kube-controller-manager
+  labels:
+    {{ promops_deploy.name }}-app: kube-controller-manager
+spec:
+  jobLabel: {{ promops_deploy.name }}-app
+  endpoints:
+  - port: http-metrics
+    interval: 30s
+  selector:
+    matchLabels:
+      {{ promops_deploy.name }}-app: kube-controller-manager
+  namespaceSelector:
+    matchNames:
+    - kube-system

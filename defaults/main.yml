@@ -1,0 +1,83 @@
+---
+promops_repo_url: "https://github.com/redhat-nfvpe/prometheus-operator"
+kube_prometheus_path: "contrib/kube-prometheus"
+promops_deploy_alertmanager: false
+
+promops_deploy:
+  name: k8s
+  namespace: monitoring
+  storage:
+    class_name: prometheus-k8s
+    size: 2Gi
+
+promops_templates:
+  - name: alertmanager
+    tmpl:
+      - alertmanager-config.yaml.j2
+      - alertmanager-service.yaml.j2
+      - alertmanager.yaml.j2
+  - name: grafana
+    tmpl:
+      - grafana-credentials.yaml.j2
+      - grafana-dashboard-definitions.yaml.j2
+      - grafana-dashboards.yaml.j2
+      - grafana-datasources.yaml.j2
+      - grafana-deployment.yaml.j2
+      - grafana-service.yaml.j2
+  - name: k8s
+    tmpl:
+      - kube-controller-manager.yaml.j2
+      - kube-dns.yaml.j2
+      - kube-scheduler.yaml.j2
+  - name: kube-state-metrics
+    tmpl:
+      - kube-state-metrics-cluster-role-binding.yaml.j2
+      - kube-state-metrics-cluster-role.yaml.j2
+      - kube-state-metrics-deployment.yaml.j2
+      - kube-state-metrics-role-binding.yaml.j2
+      - kube-state-metrics-role.yaml.j2
+      - kube-state-metrics-service-account.yaml.j2
+      - kube-state-metrics-service.yaml.j2
+  - name: metrics-server
+    tmpl:
+      - auth-delegator.yaml.j2
+      - auth-reader.yaml.j2
+      - metrics-apiservice.yaml.j2
+      - metrics-server-cluster-role-binding.yaml.j2
+      - metrics-server-cluster-role.yaml.j2
+      - metrics-server-deployment.yaml.j2
+      - metrics-server-service-account.yaml.j2
+      - metrics-server-service.yaml.j2
+  - name: node-exporter
+    tmpl:
+      - node-exporter-cluster-role-binding.yaml.j2
+      - node-exporter-cluster-role.yaml.j2
+      - node-exporter-daemonset.yaml.j2
+      - node-exporter-service-account.yaml.j2
+      - node-exporter-service.yaml.j2
+  - name: prometheus
+    tmpl:
+      - prometheus-k8s-rules.yaml.j2
+      - prometheus-k8s-service-account.yaml.j2
+      - prometheus-k8s-service-monitor-alertmanager.yaml.j2
+      - prometheus-k8s-service-monitor-apiserver.yaml.j2
+      - prometheus-k8s-service-monitor-kube-controller-manager.yaml.j2
+      - prometheus-k8s-service-monitor-kubelet.yaml.j2
+      - prometheus-k8s-service-monitor-kube-scheduler.yaml.j2
+      - prometheus-k8s-service-monitor-kube-state-metrics.yaml.j2
+      - prometheus-k8s-service-monitor-node-exporter.yaml.j2
+      - prometheus-k8s-service-monitor-prometheus-operator.yaml.j2
+      - prometheus-k8s-service-monitor-prometheus.yaml.j2
+      - prometheus-k8s-service.yaml.j2
+      - prometheus-k8s.yaml.j2
+  - name: prometheus-roles-bindings
+    tmpl:
+      - prometheus-k8s-role-bindings.yaml.j2
+      - prometheus-k8s-roles.yaml.j2
+  - name: prometheus-operator
+    tmpl:
+      - prometheus-operator-cluster-role-binding.yaml.j2
+      - prometheus-operator-cluster-role.yaml.j2
+      - prometheus-operator-service-account.yaml.j2
+      - prometheus-operator-service.yaml.j2
+      - prometheus-operator.yaml.j2

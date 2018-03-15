@@ -1,0 +1,54 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: prometheus-{{ promops_deploy.name }}
+  namespace: {{ promops_deploy.namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: prometheus-{{ promops_deploy.name }}
+subjects:
+- kind: ServiceAccount
+  name: prometheus-{{ promops_deploy.name }}
+  namespace: {{ promops_deploy.namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: prometheus-{{ promops_deploy.name }}
+  namespace: kube-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: prometheus-{{ promops_deploy.name }}
+subjects:
+- kind: ServiceAccount
+  name: prometheus-{{ promops_deploy.name }}
+  namespace: {{ promops_deploy.namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: prometheus-{{ promops_deploy.name }}
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: prometheus-{{ promops_deploy.name }}
+subjects:
+- kind: ServiceAccount
+  name: prometheus-{{ promops_deploy.name }}
+  namespace: {{ promops_deploy.namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus-{{ promops_deploy.name }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus-{{ promops_deploy.name }}
+subjects:
+- kind: ServiceAccount
+  name: prometheus-{{ promops_deploy.name }}
+  namespace: {{ promops_deploy.namespace }}

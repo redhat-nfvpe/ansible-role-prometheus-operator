@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: node-exporter
+  labels:
+    {{ promops_deploy.name }}-app: node-exporter
+spec:
+  jobLabel: {{ promops_deploy.name }}-app
+  selector:
+    matchLabels:
+      {{ promops_deploy.name }}-app: node-exporter
+  namespaceSelector:
+    matchNames:
+    - {{ promops_deploy.namespace }}
+  endpoints:
+  - port: https
+    scheme: https
+    interval: 30s
+    bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    tlsConfig:
+      insecureSkipVerify: true

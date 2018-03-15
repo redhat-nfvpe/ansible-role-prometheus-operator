@@ -1,0 +1,39 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: {{ promops_deploy.name }}
+  labels:
+    prometheus: {{ promops_deploy.name }}
+spec:
+  replicas: 2
+  version: v2.2.0-rc.1
+  serviceAccountName: prometheus-{{ promops_deploy.name }}
+  serviceMonitorSelector:
+    matchExpressions:
+    - {key: {{ promops_deploy.name }}-app, operator: Exists}
+  ruleSelector:
+    matchLabels:
+      role: prometheus-rulefiles
+      prometheus: {{ promops_deploy.name }}
+  resources:
+    requests:
+      # 2Gi is default, but won't schedule if you don't have a node with >2Gi
+      # memory. Modify based on your target and time-series count for
+      # production use. This value is mainly meant for demonstration/testing
+      # purposes.
+      memory: 400Mi
+  alerting:
+    alertmanagers:
+    - namespace: {{ promops_deploy.namespace }}
+      name: alertmanager-main
+      port: web
+  storage:
+    class: ""
+    selector: {}
+    resources: {}
+    volumeClaimTemplate:
+      spec:
+        storageClassName: {{ promops_deploy.storage.class_name }}
+        resources:
+          requests:
+            storage: {{ promops_deploy.storage.size }}
