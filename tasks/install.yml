@@ -3,7 +3,7 @@
 - name: Create directory to hold templates
   file:
     state: directory
-    path: "{{ ansible_env.HOME }}/promops_tmpl/{{ item.name }}"
+    path: "{{ ansible_env.HOME }}/promops_tmpl_{{ promops_deploy.name }}/{{ item.name }}"
   with_items:
     - "{{ promops_templates }}"
   tags:
@@ -12,7 +12,7 @@
 - name: Build {{ item.name }} templates
   template:
     src: "{{ item.0.name }}/{{ item.1 }}"
-    dest: "{{ ansible_env.HOME }}/promops_tmpl/{{ item.0.name }}/{{ item.1[:-3] }}"
+    dest: "{{ ansible_env.HOME }}/promops_tmpl_{{ promops_deploy.name }}/{{ item.0.name }}/{{ item.1[:-3] }}"
   with_subelements:
     - "{{ promops_templates }}"
     - tmpl
@@ -31,7 +31,7 @@
 - name: Deploy Prometheus Operator
   command: kubectl -n {{ promops_deploy.namespace }} apply -f prometheus-operator/
   args:
-    chdir: "{{ ansible_env.HOME }}/promops_tmpl"
+    chdir: "{{ ansible_env.HOME }}/promops_tmpl_{{ promops_deploy.name }}"
   ignore_errors: true
 
 - name: Wait for Custom Resource Definitions to be available
@@ -49,32 +49,29 @@
 - name: Deploy primary components
   command: kubectl -n {{ promops_deploy.namespace }} apply -f {{ item }}
   args:
-    chdir: "{{ ansible_env.HOME }}/promops_tmpl"
+    chdir: "{{ ansible_env.HOME }}/promops_tmpl_{{ promops_deploy.name }}"
   ignore_errors: true
   with_items:
-    - node-exporter
-    - kube-state-metrics
-    - grafana/grafana-credentials.yaml
-    - grafana
-    - prometheus
+    - "{{ promops_deploy.components }}"
 
 - name: Deploy Prometheus roles and bindings
   command: kubectl apply -f prometheus-roles-bindings/
   args:
-    chdir: "{{ ansible_env.HOME }}/promops_tmpl"
+    chdir: "{{ ansible_env.HOME }}/promops_tmpl_{{ promops_deploy.name }}"
   ignore_errors: true
 
 - name: Deploy Alertmanager
   command: kubectl -n {{ promops_deploy.namespace }} apply -f {{ item }}
   args:
-    chdir: "{{ ansible_env.HOME }}/promops_tmpl"
+    chdir: "{{ ansible_env.HOME }}/promops_tmpl_{{ promops_deploy.name }}"
   ignore_errors: true
   with_items:
     - alertmanager
-  when: promops_deploy_alertmanager | bool
+  when: promops_deploy.include_alertmanager | default(false) | bool
 
 - name: Setup services to monitor Kubernetes components
   command: kubectl apply -f k8s/
   args:
-    chdir: "{{ ansible_env.HOME }}/promops_tmpl"
-  ignore_errors: true
+    chdir: "{{ ansible_env.HOME }}/promops_tmpl_{{ promops_deploy.name }}"
+    ignore_errors: true
+  when: promops_deploy.monitor_k8s | default(false) | bool

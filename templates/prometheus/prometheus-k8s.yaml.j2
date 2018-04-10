@@ -5,7 +5,7 @@ metadata:
   labels:
     prometheus: {{ promops_deploy.name }}
 spec:
-  replicas: 2
+  replicas: {{ promops_deploy.spec.replicas }}
   version: v2.2.0-rc.1
   serviceAccountName: prometheus-{{ promops_deploy.name }}
   serviceMonitorSelector:
