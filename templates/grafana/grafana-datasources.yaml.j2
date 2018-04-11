@@ -4,12 +4,15 @@ metadata:
   name: grafana-datasources
 data:
   prometheus.yaml: |+
-    datasources:
-     - name: prometheus
-       type: prometheus
-       access: proxy
-       org_id: 1
-       url: http://prometheus-{{ promops_deploy.name }}.{{ promops_deploy.namespace }}.svc:9090
-       version: 1
-       editable: false
+    apiVersion: 1
 
+    datasources:
+    - name: prometheus
+      type: prometheus
+      access: proxy
+      orgId: 1
+      url: http://prometheus-{{ promops_deploy.name }}.{{ promops_deploy.namespace }}.svc:9090
+      jsonData:
+         timeInterval: "4s"
+      version: 1
+      editable: true

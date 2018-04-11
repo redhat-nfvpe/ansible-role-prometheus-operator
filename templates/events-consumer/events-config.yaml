@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: events-config
+data:
+  sa.events.config.json: |+
+    {
+            "AMQP1EventURL": "192.168.122.1:5672/collectd/notify",
+            "ElasticHostURL": "http://elasticsearch.sa.svc:9200",
+            "RestIndex": false
+    }
