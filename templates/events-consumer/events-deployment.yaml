@@ -1,0 +1,33 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: events
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        {{ promops_deploy.name }}-app: events
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+      containers:
+      - name: events
+        image: docker.io/nfvpe/events_consumer:latest
+        volumeMounts:
+        - name: events-config
+          mountPath: /config
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: 100m
+          limits:
+            memory: 200Mi
+            cpu: 200m
+        args: ["-config=/config/sa.events.config.json"]
+      volumes:
+      - name: events-config
+        configMap:
+          name: events-config
+

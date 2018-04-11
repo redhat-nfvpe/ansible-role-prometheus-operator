@@ -4,9 +4,14 @@ metadata:
   name: grafana-dashboards
 data:
   dashboards.yaml: |+
+    apiVersion: 1
+
+    providers:
     - name: '0'
-      org_id: 1
+      orgId: 1
       folder: ''
       type: file
+      disableDeletion: false
+      editable: true
       options:
-        folder: /grafana-dashboard-definitions/0
+        path: /grafana-dashboard-definitions/0
