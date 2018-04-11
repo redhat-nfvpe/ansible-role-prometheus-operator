@@ -70,3 +70,13 @@ promops_templates:
       - prometheus-operator-service-account.yaml.j2
       - prometheus-operator-service.yaml.j2
       - prometheus-operator.yaml.j2
+  - name: metrics-consumer
+    tmpl:
+      - metrics-config.yaml.j2
+      - metrics-deployment.yaml.j2
+      - metrics-service.yaml.j2
+  - name: events-consumer
+    tmpl:
+      - events-config.yaml.j2
+      - events-deployment.yaml.j2
+      - events-service.yaml.j2
