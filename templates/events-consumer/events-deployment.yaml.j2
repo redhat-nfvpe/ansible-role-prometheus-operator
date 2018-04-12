@@ -14,7 +14,7 @@ spec:
         runAsUser: 65534
       containers:
       - name: events
-        image: docker.io/nfvpe/events_consumer:latest
+        image: docker.io/nfvpe/events_consumer:1.0.0
         volumeMounts:
         - name: events-config
           mountPath: /config
