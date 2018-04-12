@@ -8,7 +8,7 @@ spec:
   type: NodePort
   ports:
   - name: web
-    nodePort: 30900
+    nodePort: {{ promops_deploy.prometheus.nodeport }}
     port: 9090
     protocol: TCP
     targetPort: web
