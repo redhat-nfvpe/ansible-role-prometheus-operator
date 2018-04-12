@@ -4,6 +4,10 @@ promops_deploy:
   namespace: monitoring
   include_alertmanager: false
   monitor_k8s: true
+  prometheus:
+    nodeport: 30900
+  grafana:
+    nodeport: 30902
   spec:
     replicas: 1
   components:
