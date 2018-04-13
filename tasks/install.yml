@@ -60,6 +60,13 @@
     chdir: "{{ ansible_env.HOME }}/promops_tmpl_{{ promops_deploy.name }}"
   ignore_errors: true
 
+- name: Deploy service monitors
+  command: kubectl -n {{ promops_deploy.namespace }} apply -f service-monitors/prometheus-k8s-service-monitor-{{ item }}.yaml
+  args:
+    chdir: "{{ ansible_env.HOME }}/promops_tmpl_{{ promops_deploy.name }}"
+  with_items:
+    - "{{ promops_deploy.service_monitors }}"
+
 - name: Deploy Alertmanager
   command: kubectl -n {{ promops_deploy.namespace }} apply -f {{ item }}
   args:

@@ -16,6 +16,16 @@ promops_deploy:
     - grafana/grafana-credentials.yaml
     - grafana
     - prometheus
+  service_monitors:
+    - alertmanager
+    - apiserver
+    - kube-controller-manager
+    - kubelet
+    - kube-scheduler
+    - kube-state-metrics
+    - node-exporter
+    - prometheus-operator
+    - prometheus
   storage:
     class_name: prometheus-k8s
     size: 2Gi
@@ -69,15 +79,6 @@ promops_templates:
     tmpl:
       - prometheus-k8s-rules.yaml.j2
       - prometheus-k8s-service-account.yaml.j2
-      - prometheus-k8s-service-monitor-alertmanager.yaml.j2
-      - prometheus-k8s-service-monitor-apiserver.yaml.j2
-      - prometheus-k8s-service-monitor-kube-controller-manager.yaml.j2
-      - prometheus-k8s-service-monitor-kubelet.yaml.j2
-      - prometheus-k8s-service-monitor-kube-scheduler.yaml.j2
-      - prometheus-k8s-service-monitor-kube-state-metrics.yaml.j2
-      - prometheus-k8s-service-monitor-node-exporter.yaml.j2
-      - prometheus-k8s-service-monitor-prometheus-operator.yaml.j2
-      - prometheus-k8s-service-monitor-prometheus.yaml.j2
       - prometheus-k8s-service.yaml.j2
       - prometheus-k8s.yaml.j2
   - name: prometheus-roles-bindings
@@ -101,6 +102,19 @@ promops_templates:
       - events-config.yaml.j2
       - events-deployment.yaml.j2
       - events-service.yaml.j2
+  - name: service-monitors
+    tmpl:
+      - prometheus-k8s-service-monitor-alertmanager.yaml.j2
+      - prometheus-k8s-service-monitor-apiserver.yaml.j2
+      - prometheus-k8s-service-monitor-kube-controller-manager.yaml.j2
+      - prometheus-k8s-service-monitor-kubelet.yaml.j2
+      - prometheus-k8s-service-monitor-kube-scheduler.yaml.j2
+      - prometheus-k8s-service-monitor-kube-state-metrics.yaml.j2
+      - prometheus-k8s-service-monitor-node-exporter.yaml.j2
+      - prometheus-k8s-service-monitor-prometheus-operator.yaml.j2
+      - prometheus-k8s-service-monitor-prometheus.yaml.j2
+      - prometheus-k8s-service-monitor-metrics.yaml.j2
+      - prometheus-k8s-service-monitor-events.yaml.j2
 
 grafana_dashboards:
 - name: deployment-dashboard.json
