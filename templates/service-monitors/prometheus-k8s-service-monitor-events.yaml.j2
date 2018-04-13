@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: events
+  labels:
+    {{ promops_deploy.name }}-app: events
+spec:
+  selector:
+    matchLabels:
+      {{ promops_deploy.name }}-app: events
+  namespaceSelector:
+    matchNames:
+    - {{ promops_deploy.name }}
+  endpoints:
+  - port: events
+    interval: 4s
